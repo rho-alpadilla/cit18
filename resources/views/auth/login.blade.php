@@ -1,56 +1,326 @@
-<x-guest-layout>
-    <x-auth-card>
-        <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </x-slot>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-        <!-- Session Status -->
-        <x-auth-session-status class="mb-4" :status="session('status')" />
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0f172a, #1e3a8a, #2563eb);
+            overflow: hidden;
+            position: relative;
+        }
 
-        <!-- Validation Errors -->
-        <x-auth-validation-errors class="mb-4" :errors="$errors" />
+        .bg-shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(70px);
+            opacity: 0.35;
+            animation: float 8s ease-in-out infinite;
+        }
 
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
+        .shape1 {
+            width: 260px;
+            height: 260px;
+            background: #60a5fa;
+            top: 8%;
+            left: 8%;
+        }
 
-            <!-- Email Address -->
-            <div>
-                <x-label for="email" :value="__('Email')" />
+        .shape2 {
+            width: 220px;
+            height: 220px;
+            background: #a78bfa;
+            bottom: 10%;
+            right: 10%;
+            animation-delay: 2s;
+        }
 
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
+        .shape3 {
+            width: 180px;
+            height: 180px;
+            background: #38bdf8;
+            bottom: 20%;
+            left: 18%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) translateX(0px);
+            }
+            50% {
+                transform: translateY(-18px) translateX(10px);
+            }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 430px;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.14);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 24px;
+            padding: 36px 30px;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+            color: white;
+            animation: fadeUp 0.7s ease;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .brand h1 {
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .brand p {
+            color: rgba(255, 255, 255, 0.82);
+            font-size: 14px;
+        }
+
+        .status,
+        .errors {
+            padding: 12px 14px;
+            border-radius: 12px;
+            margin-bottom: 18px;
+            font-size: 14px;
+        }
+
+        .status {
+            background: rgba(34, 197, 94, 0.18);
+            border: 1px solid rgba(34, 197, 94, 0.35);
+            color: #dcfce7;
+        }
+
+        .errors {
+            background: rgba(239, 68, 68, 0.16);
+            border: 1px solid rgba(239, 68, 68, 0.35);
+            color: #fee2e2;
+        }
+
+        .errors ul {
+            padding-left: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 14px 15px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(255, 255, 255, 0.12);
+            color: white;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.25s ease;
+        }
+
+        input[type="email"]::placeholder,
+        input[type="password"]::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: rgba(255, 255, 255, 0.45);
+            background: rgba(255, 255, 255, 0.18);
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.08);
+        }
+
+        .remember-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 4px;
+            margin-bottom: 18px;
+            color: rgba(255, 255, 255, 0.88);
+            font-size: 14px;
+        }
+
+        .remember-row input {
+            accent-color: #93c5fd;
+        }
+
+        .btn {
+            width: 100%;
+            border: none;
+            padding: 14px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #ffffff, #dbeafe);
+            color: #1e3a8a;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 28px rgba(0, 0, 0, 0.22);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .links {
+            margin-top: 22px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .links a {
+            color: #dbeafe;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.2s ease;
+        }
+
+        .links a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 520px) {
+            .card {
+                padding: 28px 22px;
+                border-radius: 20px;
+            }
+
+            .brand h1 {
+                font-size: 24px;
+            }
+
+            .container {
+                padding: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-shape shape1"></div>
+    <div class="bg-shape shape2"></div>
+    <div class="bg-shape shape3"></div>
+
+    <div class="container">
+        <div class="card">
+            <div class="brand">
+                <h1>Inventory System</h1>
+                <p>Sign in to manage your products and inventory</p>
             </div>
 
-            <!-- Password -->
-            <div class="mt-4">
-                <x-label for="password" :value="__('Password')" />
+            @if (session('status'))
+                <div class="status">
+                    {{ session('status') }}
+                </div>
+            @endif
 
-                <x-input id="password" class="block mt-1 w-full"
-                                type="password"
-                                name="password"
-                                required autocomplete="current-password" />
-            </div>
+            @if ($errors->any())
+                <div class="errors">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
-            <!-- Remember Me -->
-            <div class="block mt-4">
-                <label for="remember_me" class="inline-flex items-center">
-                    <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="remember">
-                    <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-                </label>
-            </div>
+            <form method="POST" action="{{ route('login') }}">
+                @csrf
 
-            <div class="flex items-center justify-end mt-4">
-                @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
-                        {{ __('Forgot your password?') }}
-                    </a>
-                @endif
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input
+                        id="email"
+                        type="email"
+                        name="email"
+                        value="{{ old('email') }}"
+                        placeholder="Enter your email"
+                        required
+                        autofocus
+                    >
+                </div>
 
-                <x-button class="ml-3">
-                    {{ __('Log in') }}
-                </x-button>
-            </div>
-        </form>
-    </x-auth-card>
-</x-guest-layout>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input
+                        id="password"
+                        type="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        required
+                    >
+                </div>
+
+                <div class="remember-row">
+                    <input id="remember_me" type="checkbox" name="remember">
+                    <label for="remember_me" style="margin: 0; font-weight: 400;">Remember me</label>
+                </div>
+
+                <button type="submit" class="btn">Log In</button>
+
+                <div class="links">
+                    @if (Route::has('register'))
+                        <a href="{{ route('register') }}">Create Account</a>
+                    @endif
+
+                    @if (Route::has('password.request'))
+                        <a href="{{ route('password.request') }}">Forgot Password?</a>
+                    @endif
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

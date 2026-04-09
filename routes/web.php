@@ -1,10 +1,9 @@
 <?php
 
-use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/login');
 });
 
 Route::get('/dashboard', function () {
@@ -12,7 +11,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
-    Route::resource('products', ProductController::class);
+    Route::resource('products', \App\Http\Controllers\ProductController::class);
 });
 
 require __DIR__.'/auth.php';
