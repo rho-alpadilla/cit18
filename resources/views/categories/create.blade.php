@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Add Category</title>
     <style>
         * {
             box-sizing: border-box;
@@ -15,10 +15,10 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
             background: linear-gradient(135deg, #0f172a, #1e3a8a, #2563eb);
-            overflow-x: hidden;
-            position: relative;
-            padding: 30px 20px;
             color: white;
+            padding: 30px 20px;
+            position: relative;
+            overflow-x: hidden;
         }
 
         .bg-shape {
@@ -66,7 +66,7 @@
         }
 
         .wrapper {
-            max-width: 1100px;
+            max-width: 900px;
             margin: 0 auto;
             position: relative;
             z-index: 1;
@@ -77,17 +77,16 @@
             justify-content: space-between;
             align-items: center;
             gap: 15px;
-            margin-bottom: 25px;
             flex-wrap: wrap;
+            margin-bottom: 24px;
         }
 
-        .brand h1 {
+        .title h1 {
             font-size: 32px;
-            font-weight: 700;
             margin-bottom: 6px;
         }
 
-        .brand p {
+        .title p {
             color: rgba(255, 255, 255, 0.8);
             font-size: 15px;
         }
@@ -113,15 +112,14 @@
             transform: translateY(-2px);
         }
 
-        .hero-card {
+        .card {
             background: rgba(255, 255, 255, 0.14);
             backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px);
             border: 1px solid rgba(255, 255, 255, 0.18);
             border-radius: 26px;
-            padding: 35px;
+            padding: 30px;
             box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
-            margin-bottom: 25px;
             animation: fadeUp 0.7s ease;
         }
 
@@ -136,19 +134,71 @@
             }
         }
 
-        .hero-card h2 {
-            font-size: 28px;
-            margin-bottom: 12px;
+        .card h2 {
+            font-size: 26px;
+            margin-bottom: 8px;
         }
 
-        .hero-card p {
-            color: rgba(255, 255, 255, 0.82);
-            line-height: 1.7;
-            margin-bottom: 22px;
-            max-width: 700px;
+        .subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 24px;
+            font-size: 15px;
+        }
+
+        .errors {
+            background: rgba(239, 68, 68, 0.16);
+            border: 1px solid rgba(239, 68, 68, 0.35);
+            color: #fee2e2;
+            padding: 12px 14px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+        }
+
+        .errors ul {
+            padding-left: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 15px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(255, 255, 255, 0.12);
+            color: white;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.25s ease;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        input:focus {
+            border-color: rgba(255, 255, 255, 0.45);
+            background: rgba(255, 255, 255, 0.18);
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.08);
+        }
+
+        .error-text {
+            color: #fecaca;
+            font-size: 13px;
         }
 
         .actions {
+            margin-top: 24px;
             display: flex;
             gap: 12px;
             flex-wrap: wrap;
@@ -156,97 +206,45 @@
 
         .btn {
             display: inline-block;
-            border: none;
             text-decoration: none;
+            border: none;
             padding: 13px 18px;
             border-radius: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.25s ease;
+            font-size: 14px;
         }
 
-        .btn-primary {
+        .btn-save {
             background: linear-gradient(135deg, #ffffff, #dbeafe);
             color: #1e3a8a;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
         }
 
-        .btn-primary:hover {
+        .btn-save:hover {
             transform: translateY(-2px);
             box-shadow: 0 16px 28px rgba(0, 0, 0, 0.22);
         }
 
-        .btn-danger {
-            background: rgba(239, 68, 68, 0.18);
+        .btn-back {
+            background: rgba(255, 255, 255, 0.12);
             color: white;
-            border: 1px solid rgba(239, 68, 68, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.18);
         }
 
-        .btn-danger:hover {
-            background: rgba(239, 68, 68, 0.28);
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.2);
             transform: translateY(-2px);
         }
 
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 18px;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            border-radius: 22px;
-            padding: 24px;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
-        }
-
-        .stat-card h3 {
-            font-size: 15px;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 12px;
-        }
-
-        .stat-card .number {
-            font-size: 32px;
-            font-weight: 700;
-        }
-
-        .stat-card .desc {
-            margin-top: 8px;
-            color: rgba(255, 255, 255, 0.72);
-            font-size: 14px;
-        }
-
-        .logout-form {
-            display: inline-block;
-        }
-
-        @media (max-width: 900px) {
-            .stats {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .hero-card,
-            .stat-card {
-                padding: 22px;
-            }
-
-            .brand h1 {
+        @media (max-width: 700px) {
+            .title h1 {
                 font-size: 26px;
             }
 
-            .hero-card h2 {
-                font-size: 22px;
-            }
-
-            .topbar {
-                align-items: flex-start;
+            .card {
+                padding: 22px;
             }
         }
     </style>
@@ -258,56 +256,55 @@
 
     <div class="wrapper">
         <div class="topbar">
-            <div class="brand">
+            <div class="title">
                 <h1>Inventory Management System</h1>
-                <p>Manage products, monitor inventory, and keep your records organized.</p>
+                <p>Add a new category for your product organization.</p>
             </div>
 
-       <div class="nav-links">
-    <a href="{{ url('/dashboard') }}">Dashboard</a>
-    <a href="{{ route('products.index') }}">Products</a>
-    <a href="{{ route('categories.index') }}">Categories</a>
-    <a href="{{ route('suppliers.index') }}">Suppliers</a>
-</div>
+            <div class="nav-links">
+                <a href="{{ url('/dashboard') }}">Dashboard</a>
+                <a href="{{ route('products.index') }}">Products</a>
+                <a href="{{ route('categories.index') }}">Categories</a>
+            </div>
         </div>
 
-        <div class="hero-card">
-            <h2>Welcome back</h2>
-            <p>
-                You are logged in successfully. From here, you can manage your products,
-                update stock information, and keep your inventory records clean and organized.
-            </p>
+        <div class="card">
+            <h2>Add Category</h2>
+            <p class="subtitle">Create a new category to use in your product records.</p>
 
-         <div class="actions">
-    <a href="{{ route('products.index') }}" class="btn btn-primary">Go to Products</a>
-    <a href="{{ route('categories.index') }}" class="btn btn-primary">Categories</a>
-    <a href="{{ route('suppliers.index') }}" class="btn btn-primary">Suppliers</a>
+            @if ($errors->any())
+                <div class="errors">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
-    <form method="POST" action="{{ route('logout') }}">
-        @csrf
-        <button type="submit" class="btn btn-danger">Logout</button>
-    </form>
-</div>
-        </div>
+            <form action="{{ route('categories.store') }}" method="POST">
+                @csrf
 
-        <div class="stats">
-            <div class="stat-card">
-                <h3>Main Feature</h3>
-                <div class="number">CRUD</div>
-                <div class="desc">Create, read, update, and delete product records.</div>
-            </div>
+                <div class="form-group">
+                    <label for="name">Category Name</label>
+                    <input
+                        id="name"
+                        type="text"
+                        name="name"
+                        value="{{ old('name') }}"
+                        placeholder="Enter category name"
+                        required
+                    >
+                    @error('name')
+                        <p class="error-text">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            <div class="stat-card">
-                <h3>Security</h3>
-                <div class="number">Auth</div>
-                <div class="desc">Only logged-in users can access the system features.</div>
-            </div>
-
-            <div class="stat-card">
-                <h3>Database</h3>
-                <div class="number">5</div>
-                <div class="desc">Users, categories, suppliers, products, and stocks.</div>
-            </div>
+                <div class="actions">
+                    <button type="submit" class="btn btn-save">Save Category</button>
+                    <a href="{{ route('categories.index') }}" class="btn btn-back">Back</a>
+                </div>
+            </form>
         </div>
     </div>
 </body>

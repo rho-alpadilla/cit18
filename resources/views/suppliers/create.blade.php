@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Product</title>
+    <title>Add Supplier</title>
     <style>
         * {
             box-sizing: border-box;
@@ -120,18 +120,6 @@
             border-radius: 26px;
             padding: 30px;
             box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
-            animation: fadeUp 0.7s ease;
-        }
-
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(25px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         .card h2 {
@@ -167,6 +155,7 @@
         .form-group {
             display: flex;
             flex-direction: column;
+            gap: 8px;
         }
 
         .form-group.full {
@@ -174,14 +163,12 @@
         }
 
         label {
-            margin-bottom: 8px;
             font-size: 14px;
             font-weight: 600;
             color: rgba(255, 255, 255, 0.9);
         }
 
         input,
-        select,
         textarea {
             width: 100%;
             padding: 14px 15px;
@@ -191,29 +178,16 @@
             color: white;
             font-size: 15px;
             outline: none;
-            transition: all 0.25s ease;
-        }
-
-        input::placeholder,
-        textarea::placeholder {
-            color: rgba(255, 255, 255, 0.6);
-        }
-
-        input:focus,
-        select:focus,
-        textarea:focus {
-            border-color: rgba(255, 255, 255, 0.45);
-            background: rgba(255, 255, 255, 0.18);
-            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.08);
-        }
-
-        select option {
-            color: black;
         }
 
         textarea {
-            min-height: 130px;
+            min-height: 110px;
             resize: vertical;
+        }
+
+        .error-text {
+            color: #fecaca;
+            font-size: 13px;
         }
 
         .actions {
@@ -231,30 +205,18 @@
             border-radius: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.25s ease;
             font-size: 14px;
         }
 
-        .btn-update {
+        .btn-save {
             background: linear-gradient(135deg, #ffffff, #dbeafe);
             color: #1e3a8a;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
-        }
-
-        .btn-update:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 16px 28px rgba(0, 0, 0, 0.22);
         }
 
         .btn-back {
             background: rgba(255, 255, 255, 0.12);
             color: white;
             border: 1px solid rgba(255, 255, 255, 0.18);
-        }
-
-        .btn-back:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
         }
 
         @media (max-width: 700px) {
@@ -281,18 +243,20 @@
         <div class="topbar">
             <div class="title">
                 <h1>Inventory Management System</h1>
-                <p>Update product information and keep your inventory records accurate.</p>
+                <p>Add a new supplier for your product inventory.</p>
             </div>
 
             <div class="nav-links">
                 <a href="{{ url('/dashboard') }}">Dashboard</a>
                 <a href="{{ route('products.index') }}">Products</a>
+                <a href="{{ route('categories.index') }}">Categories</a>
+                <a href="{{ route('suppliers.index') }}">Suppliers</a>
             </div>
         </div>
 
         <div class="card">
-            <h2>Edit Product</h2>
-            <p class="subtitle">Modify the product details below.</p>
+            <h2>Add Supplier</h2>
+            <p class="subtitle">Create a new supplier record for your inventory system.</p>
 
             @if ($errors->any())
                 <div class="errors">
@@ -304,78 +268,54 @@
                 </div>
             @endif
 
-            <form action="{{ route('products.update', $product->id) }}" method="POST">
+            <form action="{{ route('suppliers.store') }}" method="POST">
                 @csrf
-                @method('PUT')
 
                 <div class="form-grid">
-                    <div class="form-group full">
-                        <label for="name">Product Name</label>
-                        <input
-                            id="name"
-                            type="text"
-                            name="name"
-                            value="{{ old('name', $product->name) }}"
-                            placeholder="Enter product name"
-                        >
+                    <div class="form-group">
+                        <label for="name">Supplier Name</label>
+                        <input id="name" type="text" name="name" value="{{ old('name') }}" placeholder="Enter supplier name" required>
+                        @error('name')
+                            <p class="error-text">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div class="form-group">
-                        <label for="category_id">Category</label>
-                        <select id="category_id" name="category_id">
-                            <option value="">Select Category</option>
-                            @foreach($categories as $category)
-                                <option value="{{ $category->id }}" {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}>
-                                    {{ $category->name }}
-                                </option>
-                            @endforeach
-                        </select>
+                        <label for="contact_person">Contact Person</label>
+                        <input id="contact_person" type="text" name="contact_person" value="{{ old('contact_person') }}" placeholder="Enter contact person">
+                        @error('contact_person')
+                            <p class="error-text">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div class="form-group">
-                        <label for="supplier_id">Supplier</label>
-                        <select id="supplier_id" name="supplier_id">
-                            <option value="">Select Supplier</option>
-                            @foreach($suppliers as $supplier)
-                                <option value="{{ $supplier->id }}" {{ old('supplier_id', $product->supplier_id) == $supplier->id ? 'selected' : '' }}>
-                                    {{ $supplier->name }}
-                                </option>
-                            @endforeach
-                        </select>
+                        <label for="phone">Phone</label>
+                        <input id="phone" type="text" name="phone" value="{{ old('phone') }}" placeholder="Enter phone number">
+                        @error('phone')
+                            <p class="error-text">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input id="email" type="email" name="email" value="{{ old('email') }}" placeholder="Enter email address">
+                        @error('email')
+                            <p class="error-text">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div class="form-group full">
-                        <label for="description">Description</label>
-                        <textarea id="description" name="description" placeholder="Enter product description">{{ old('description', $product->description) }}</textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="price">Price</label>
-                        <input
-                            id="price"
-                            type="number"
-                            step="0.01"
-                            name="price"
-                            value="{{ old('price', $product->price) }}"
-                            placeholder="Enter price"
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="quantity">Stocks</label>
-                        <input
-                            id="quantity"
-                            type="number"
-                            name="quantity"
-                            value="{{ old('quantity', $product->quantity) }}"
-                            placeholder="Enter quantity"
-                        >
+                        <label for="address">Address</label>
+                        <textarea id="address" name="address" placeholder="Enter supplier address">{{ old('address') }}</textarea>
+                        @error('address')
+                            <p class="error-text">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
 
                 <div class="actions">
-                    <button type="submit" class="btn btn-update">Update Product</button>
-                    <a href="{{ route('products.index') }}" class="btn btn-back">Back</a>
+                    <button type="submit" class="btn btn-save">Save Supplier</button>
+                    <a href="{{ route('suppliers.index') }}" class="btn btn-back">Back</a>
                 </div>
             </form>
         </div>
